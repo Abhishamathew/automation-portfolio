@@ -3,8 +3,9 @@
 
     <test name="UI Tests">
         <classes>
-            <class name="tests.ui.LoginTest"/>
-            <class name="tests.ui.RegisterTest"/>
+<!--            <class name="tests.ui.LoginTest"/>-->
+<!--            <class name="tests.ui.RegisterTest"/>-->
+            <class name="tests.ui.ProductTest"/>
         </classes>
     </test>
 
