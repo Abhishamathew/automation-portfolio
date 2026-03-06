@@ -5,7 +5,8 @@
         <classes>
 <!--            <class name="tests.ui.LoginTest"/>-->
 <!--            <class name="tests.ui.RegisterTest"/>-->
-            <class name="tests.ui.ProductTest"/>
+<!--            <class name="tests.ui.ProductTest"/>-->
+            <class name="tests.ui.CartTest"/>
         </classes>
     </test>
 
