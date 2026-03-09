@@ -40,4 +40,27 @@ public class LoginTest extends BaseTest {
 
         System.out.println("✅ Invalid login test passed!");
     }
+
+    @Test(description = "Verify user can logout successfully")
+    public void logoutUser() {
+        LoginPage loginPage = new LoginPage(driver);
+
+        // Login first
+        loginPage.login(
+                ConfigReader.get("login.email"),
+                ConfigReader.get("login.password")
+        );
+
+        Assert.assertTrue(loginPage.isLoginSuccessful(),
+                "Login failed! Cannot test logout.");
+
+        // Logout
+        loginPage.clickLogout();
+
+        // Assert redirected to login page
+        Assert.assertTrue(loginPage.isLoggedOut(),
+                "User was not redirected to login page after logout!");
+
+        System.out.println("✅ Logout test passed!");
+    }
 }

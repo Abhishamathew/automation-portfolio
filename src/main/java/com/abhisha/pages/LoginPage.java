@@ -19,6 +19,8 @@ public class LoginPage {
     By loginButton = By.cssSelector("[data-qa='login-button']");
     By errorMessage = By.xpath("//*[contains(text(),'Your email or password is incorrect!')]");
     By loggedInAs = By.xpath("//a[contains(text(),'Logged in as')]");
+    By logoutButton = By.cssSelector("a[href='/logout']");
+    By loggedInAsText = By.xpath("//a[contains(text(),'Logged in as')]");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -54,6 +56,22 @@ public class LoginPage {
             return true;
         } catch (Exception e) {
             System.out.println("Error message not found!");
+            return false;
+        }
+    }
+
+    public void clickLogout() {
+        wait.until(ExpectedConditions.elementToBeClickable(logoutButton)).click();
+        System.out.println("Clicked Logout");
+    }
+
+    public boolean isLoggedOut() {
+        try {
+            wait.until(ExpectedConditions.urlContains("/login"));
+            System.out.println("Redirected to login page after logout!");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Not redirected to login page!");
             return false;
         }
     }
