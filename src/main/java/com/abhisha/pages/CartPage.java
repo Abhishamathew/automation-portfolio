@@ -24,6 +24,7 @@ public class CartPage {
     By checkoutModal = By.cssSelector("#checkoutModal");
     By checkoutModalTitle = By.cssSelector(".modal-title");
     By continueOnCartButton = By.cssSelector(".close-checkout-modal");
+    By cartQuantityButton = By.cssSelector(".cart_quantity button");
 
     public CartPage(WebDriver driver) {
         this.driver = driver;
@@ -104,5 +105,17 @@ public class CartPage {
     public void clickContinueOnCart() {
         wait.until(ExpectedConditions.elementToBeClickable(continueOnCartButton)).click();
         System.out.println("Clicked Continue On Cart");
+    }
+
+    public int getProductQuantityInCart() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(cartQuantityButton));
+            String qty = driver.findElement(cartQuantityButton).getText();
+            System.out.println("Product quantity in cart: " + qty);
+            return Integer.parseInt(qty.trim());
+        } catch (Exception e) {
+            System.out.println("Could not get quantity from cart!");
+            return 0;
+        }
     }
 }

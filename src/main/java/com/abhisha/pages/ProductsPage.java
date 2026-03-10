@@ -24,6 +24,9 @@ public class ProductsPage {
     By addToCartButtons = By.cssSelector(".productinfo .add-to-cart");
     By cartModalTitle = By.cssSelector(".modal-title");
     By continueShoppingButton = By.cssSelector(".close-modal");
+    // Product detail page locators
+    By quantityInput = By.id("quantity");
+    By addToCartButtonDetail = By.cssSelector("button.cart");
 
     public ProductsPage(WebDriver driver) {
         this.driver = driver;
@@ -108,5 +111,25 @@ public class ProductsPage {
     public void clickContinueShopping() {
         wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton)).click();
         System.out.println("Clicked Continue Shopping");
+    }
+
+    public void navigateToProductDetail(int productId) {
+        driver.get("https://automationexercise.com/product_details/" + productId);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(quantityInput));
+        System.out.println("On product detail page for product: " + productId);
+    }
+
+    public void setQuantity(int quantity) {
+        WebElement qtyInput = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(quantityInput)
+        );
+        qtyInput.clear();
+        qtyInput.sendKeys(String.valueOf(quantity));
+        System.out.println("Set quantity to: " + quantity);
+    }
+
+    public void clickAddToCartOnDetailPage() {
+        driver.findElement(addToCartButtonDetail).click();
+        System.out.println("Clicked Add to Cart on detail page");
     }
 }
