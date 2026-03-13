@@ -10,6 +10,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
@@ -17,34 +19,21 @@ import org.testng.annotations.BeforeMethod;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BaseTest {
 
     protected WebDriver driver;
+    protected WebDriverWait wait; // ← added
     protected static ExtentReports extent = ExtentReportManager.getInstance();
     protected static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
-//    @BeforeMethod
-//    public void setup(java.lang.reflect.Method method) {
-//        ExtentTest extentTest = extent.createTest(method.getName());
-//        test.set(extentTest);
-//
-//        WebDriverManager.chromedriver().setup();
-//        driver = new ChromeDriver();
-//        driver.manage().window().maximize();
-//        driver.get("https://automationexercise.com");
-//
-//        test.get().info("Browser opened and navigated to automationexercise.com");
-//    }
-
     @BeforeMethod
     public void setUp(java.lang.reflect.Method method) {
-        // Initialize extent test FIRST
         ExtentTest extentTest = ExtentReportManager.getInstance()
                 .createTest(method.getName());
         test.set(extentTest);
@@ -55,17 +44,23 @@ public class BaseTest {
         options.addArguments("--disable-extensions");
         options.addArguments("--no-sandbox");
         options.addArguments("--start-maximized");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--disable-blink-features=AutomationControlled");
+        options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
+        options.setExperimentalOption("useAutomationExtension", false);
 
-        // Block ads
         Map<String, Object> prefs = new HashMap<>();
         prefs.put("profile.default_content_setting_values.ads", 2);
         prefs.put("profile.default_content_setting_values.popups", 2);
         options.setExperimentalOption("prefs", prefs);
 
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver(options); // ← pass options here
+        driver = new ChromeDriver(options);
         driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(15)); // ← added
+
         driver.get("https://automationexercise.com");
+        removeAds();
 
         test.get().info("Browser opened and navigated to automationexercise.com");
     }
