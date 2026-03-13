@@ -23,9 +23,18 @@ public class JavascriptUtils {
     }
 
     public void removePopups() {
-        js.executeScript(
-                "var iframes = document.querySelectorAll('iframe');" +
-                        "iframes.forEach(function(iframe) { iframe.remove(); });"
-        );
+        try {
+            ((JavascriptExecutor) driver).executeScript(
+                    "var iframes = document.querySelectorAll('iframe');" +
+                            "iframes.forEach(function(el) { el.remove(); });" +
+                            "var ads = document.querySelectorAll('ins, .adsbygoogle, [id*=\"google_ads\"], [id*=\"aswift\"], .google-auto-placed, [id*=\"ad_\"]');" +
+                            "ads.forEach(function(el) { el.remove(); });"
+            );
+            System.out.println("Ads and popups removed");
+        } catch (Exception e) {
+            System.out.println("No ads to remove");
+        }
     }
+
+
 }

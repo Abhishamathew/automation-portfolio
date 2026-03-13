@@ -19,6 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.openqa.selenium.chrome.ChromeOptions;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseTest {
 
@@ -26,13 +29,41 @@ public class BaseTest {
     protected static ExtentReports extent = ExtentReportManager.getInstance();
     protected static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
+//    @BeforeMethod
+//    public void setup(java.lang.reflect.Method method) {
+//        ExtentTest extentTest = extent.createTest(method.getName());
+//        test.set(extentTest);
+//
+//        WebDriverManager.chromedriver().setup();
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//        driver.get("https://automationexercise.com");
+//
+//        test.get().info("Browser opened and navigated to automationexercise.com");
+//    }
+
     @BeforeMethod
-    public void setup(java.lang.reflect.Method method) {
-        ExtentTest extentTest = extent.createTest(method.getName());
+    public void setUp(java.lang.reflect.Method method) {
+        // Initialize extent test FIRST
+        ExtentTest extentTest = ExtentReportManager.getInstance()
+                .createTest(method.getName());
         test.set(extentTest);
 
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-notifications");
+        options.addArguments("--disable-popup-blocking");
+        options.addArguments("--disable-extensions");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--start-maximized");
+
+        // Block ads
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("profile.default_content_setting_values.ads", 2);
+        prefs.put("profile.default_content_setting_values.popups", 2);
+        options.setExperimentalOption("prefs", prefs);
+
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(options); // ← pass options here
         driver.manage().window().maximize();
         driver.get("https://automationexercise.com");
 
@@ -75,6 +106,19 @@ public class BaseTest {
         } catch (IOException e) {
             System.out.println("Failed to take screenshot: " + e.getMessage());
             return "";
+        }
+    }
+
+    public void removeAds() {
+        try {
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
+                    "var iframes = document.querySelectorAll('iframe');" +
+                            "iframes.forEach(function(el) { el.remove(); });" +
+                            "var ads = document.querySelectorAll('ins, .adsbygoogle, [id*=\"google_ads\"], [id*=\"aswift\"], .google-auto-placed');" +
+                            "ads.forEach(function(el) { el.remove(); });"
+            );
+        } catch (Exception e) {
+            System.out.println("Ad removal skipped");
         }
     }
 }

@@ -9,7 +9,9 @@
 <!--            <class name="tests.ui.CartTest"/>-->
 <!--            <class name="tests.ui.ContactTest"/>-->
 <!--            <class name="tests.ui.SubscriptionTest"/>-->
-            <class name="tests.ui.QuantityTest"/>
+<!--            <class name="tests.ui.QuantityTest"/>-->
+<!--            <class name="tests.ui.PlaceOrderTest"/>-->
+            <class name="tests.ui.CategoryTest"/>
         </classes>
     </test>
 

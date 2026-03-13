@@ -3,6 +3,7 @@ package com.abhisha.pages;
 import com.abhisha.utils.JavascriptUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -31,11 +32,24 @@ public class LoginPage {
     public void login(String email, String password) {
         driver.get("https://automationexercise.com/login");
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput))
-                .sendKeys(email);
-        driver.findElement(passwordInput).sendKeys(password);
-        driver.findElement(loginButton).click();
+        try { Thread.sleep(2000); } catch (InterruptedException e) { e.printStackTrace(); }
+
+        // Type email
+        WebElement emailField = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(emailInput));
+        emailField.clear();
+        emailField.sendKeys(email);
+
+        // Type password then press ENTER to submit
+        WebElement passField = driver.findElement(passwordInput);
+        passField.clear();
+        passField.sendKeys(password);
+        passField.sendKeys(org.openqa.selenium.Keys.ENTER);
+
+        try { Thread.sleep(3000); } catch (InterruptedException e) { e.printStackTrace(); }
+
         System.out.println("Login attempted with: " + email);
+        System.out.println("URL after login: " + driver.getCurrentUrl());
     }
 
     public boolean isLoginSuccessful() {
