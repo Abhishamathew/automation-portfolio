@@ -15,4 +15,13 @@
         </classes>
     </test>
 
+    <test name="API Tests">
+        <classes>
+            <class name="tests.api.ProductApiTest"/>
+            <class name="tests.api.BrandApiTest"/>
+            <class name="tests.api.SearchApiTest"/>
+            <class name="tests.api.UserApiTest"/>
+        </classes>
+    </test>
+
 </suite>
