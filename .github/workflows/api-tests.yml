@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  api-tests:
-    name: Run API Tests
+  full-test-suite:
+    name: Run Full Test Suite
     runs-on: ubuntu-latest
 
     steps:
@@ -29,12 +29,17 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Run API Tests
-        run: mvn test -Dtest="tests.api.ProductApiTest,tests.api.BrandApiTest,tests.api.SearchApiTest,tests.api.UserApiTest" -DfailIfNoTests=false
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run All Tests
+        run: mvn test -DfailIfNoTests=false -Dmaven.test.failure.ignore=true
+        env:
+          HEADLESS: true
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: api-test-results
+          name: full-test-report
           path: reports/

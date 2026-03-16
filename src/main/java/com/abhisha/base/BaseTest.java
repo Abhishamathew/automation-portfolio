@@ -32,6 +32,8 @@ public class BaseTest {
     protected static ExtentReports extent = ExtentReportManager.getInstance();
     protected static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
+
+
     @BeforeMethod
     public void setUp(java.lang.reflect.Method method) {
         ExtentTest extentTest = ExtentReportManager.getInstance()
@@ -48,6 +50,13 @@ public class BaseTest {
         options.addArguments("--disable-blink-features=AutomationControlled");
         options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
         options.setExperimentalOption("useAutomationExtension", false);
+
+        if (System.getenv("HEADLESS") != null) {
+            options.addArguments("--headless=new");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--remote-debugging-port=9222");
+            System.out.println("Running in HEADLESS mode");
+        }
 
         Map<String, Object> prefs = new HashMap<>();
         prefs.put("profile.default_content_setting_values.ads", 2);
