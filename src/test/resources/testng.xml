@@ -21,6 +21,7 @@
             <class name="tests.api.BrandApiTest"/>
             <class name="tests.api.SearchApiTest"/>
             <class name="tests.api.UserApiTest"/>
+            <class name="tests.ui.ReviewTest"/>
         </classes>
     </test>
 
